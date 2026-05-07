@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>德胧客房质检播客日报 2026-05-07</title>
+  <style>
+    :root {
+      --primary: #c8102e;
+      --primary-dark: #a00d24;
+      --secondary: #1a1a2e;
+      --accent: #f5a623;
+      --bg: #0f0f1a;
+      --card-bg: #1a1a2e;
+      --text: #ffffff;
+      --text-muted: #a0a0b0;
+      --highlight: #ffd700;
+      --progress: #c8102e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container { max-width: 680px; margin: 0 auto; }
+
+    .header { text-align: center; margin-bottom: 24px; }
+    .header-icon { font-size: 48px; margin-bottom: 8px; }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .header .meta { font-size: 14px; color: var(--text-muted); }
+
+    .player-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .player-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .player-info .date { font-size: 14px; color: var(--accent); font-weight: 600; }
+    .player-info .duration { font-size: 13px; color: var(--text-muted); }
+
+    .progress-bar {
+      width: 100%; height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .player-controls { display: flex; align-items: center; gap: 16px; }
+
+    .play-btn {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .play-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+    .play-btn.playing { background: var(--accent); }
+    .play-btn svg { width: 24px; height: 24px; fill: white; }
+
+    .time-display { font-size: 14px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+    .subtitle-section {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .subtitle-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .subtitle-header span { font-size: 13px; color: var(--text-muted); }
+
+    .subtitle-list { list-style: none; }
+
+    .subtitle-item {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: 16px;
+      line-height: 1.7;
+      transition: all 0.3s ease;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .subtitle-item:last-child { margin-bottom: 0; }
+    .subtitle-item:hover { background: rgba(255,255,255,0.05); }
+    .subtitle-item.active {
+      background: rgba(200, 16, 46, 0.15);
+      color: var(--text);
+      border-left: 3px solid var(--primary);
+    }
+    .subtitle-item.active .cue { color: var(--highlight); }
+    .cue { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+    .stat-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; text-align: center; }
+    .stat-card .value { font-size: 24px; font-weight: 700; color: var(--accent); }
+    .stat-card .label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .footer { text-align: center; margin-top: 24px; padding: 16px; font-size: 13px; color: var(--text-muted); }
+    .footer a { color: var(--primary); text-decoration: none; }
+
+    @media (max-width: 480px) {
+      body { padding: 12px; }
+      .header h1 { font-size: 18px; }
+      .player-card, .subtitle-section { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-card .value { font-size: 20px; }
+      .subtitle-item { font-size: 15px; padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-icon">🎧</div>
+      <h1>德胧客房质检播客日报</h1>
+      <div class="meta">五月七日 · 约45秒</div>
+    </div>
+
+    <div class="player-card">
+      <div class="player-info">
+        <span class="date">五月七日</span>
+        <span class="duration">约45秒</span>
+      </div>
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="player-controls">
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">
+          <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <span class="time-display">
+          <span id="currentTime">0:00</span> / <span id="totalTime">约45秒</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="subtitle-section">
+      <div class="subtitle-header">
+        <span>📝</span>
+        <span>字幕 · 点击跳转播放</span>
+      </div>
+      <ul class="subtitle-list" id="subtitleList">
+        <!-- 字幕由 JS 动态生成 -->
+      </ul>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="value">70</div>
+        <div class="label">检测图片</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">15.7%</div>
+        <div class="label">合格率</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">84.3%</div>
+        <div class="label">不合格率</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      数据来源：德胧客房质检系统 ·
+      <a href="https://your-feishu-dashboard-url.com" target="_blank">查看飞书看板</a>
+    </div>
+  </div>
+
+  <!-- 音频 -->
+  <audio id="audioPlayer" preload="auto">
+    <source src="data:audio/mp3;base64," type="audio/mpeg">
+  </audio>
+
+  <script>
+    // 字幕时间轴（由 Python 脚本注入）
+    const CUES = [{"start": 0, "end": 1500, "text": "德胧客房质检日报"}, {"start": 1500, "end": 3000, "text": "五月七日"}, {"start": 3000, "end": 6000, "text": "今日共检测七十张图片"}, {"start": 6000, "end": 9000, "text": "合格十一张"}, {"start": 9000, "end": 13000, "text": "不合格五十九张，不合格率百分之八十四点三"}, {"start": 13000, "end": 17000, "text": "重点关注二十二层"}, {"start": 17000, "end": 21000, "text": "零合格率"}, {"start": 21000, "end": 25000, "text": "十二层百分之二十"}, {"start": 25000, "end": 29000, "text": "十五层百分之三十三"}, {"start": 29000, "end": 33000, "text": "床铺不整占比百分之四十五"}, {"start": 33000, "end": 37000, "text": "卫浴有渍占比百分之二十八"}, {"start": 37000, "end": 41000, "text": "地面有污占比百分之十七"}, {"start": 41000, "end": 45000, "text": "详情请查看飞书看板"}, {"start": 45000, "end": 50000, "text": "感谢收听"}];
+
+    const audio = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const progressFill = document.getElementById('progressFill');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalTimeEl = document.getElementById('totalTime');
+    const subtitleList = document.getElementById('subtitleList');
+
+    let isPlaying = false;
+    let activeIndex = -1;
+
+    function formatTime(ms) {
+      const s = Math.floor(ms / 1000);
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function initSubtitles() {
+      subtitleList.innerHTML = CUES.map((cue, i) => `
+        <li class="subtitle-item" data-index="${i}" onclick="seekTo(${cue.start})">
+          <div class="cue">${formatTime(cue.start)}</div>
+          <div class="text">${cue.text}</div>
+        </li>
+      `).join('');
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        audio.pause();
+        playBtn.classList.remove('playing');
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      } else {
+        audio.play();
+        playBtn.classList.add('playing');
+        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      }
+      isPlaying = !isPlaying;
+    }
+
+    function seekTo(ms) {
+      audio.currentTime = ms / 1000;
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      const currentMs = audio.currentTime * 1000;
+      const progress = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = progress + '%';
+      currentTimeEl.textContent = formatTime(currentMs);
+
+      let newIndex = -1;
+      for (let i = 0; i < CUES.length; i++) {
+        if (currentMs >= CUES[i].start && currentMs < CUES[i].end) {
+          newIndex = i;
+          break;
+        }
+      }
+      if (newIndex !== activeIndex) {
+        if (activeIndex >= 0) {
+          subtitleList.children[activeIndex]?.classList.remove('active');
+        }
+        if (newIndex >= 0) {
+          subtitleList.children[newIndex]?.classList.add('active');
+          subtitleList.children[newIndex]?.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+        activeIndex = newIndex;
+      }
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const ratio = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = ratio * audio.duration;
+    });
+
+    audio.addEventListener('ended', () => {
+      isPlaying = false;
+      playBtn.classList.remove('playing');
+      playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      progressFill.style.width = '0%';
+      activeIndex = -1;
+      document.querySelectorAll('.subtitle-item').forEach(el => el.classList.remove('active'));
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      totalTimeEl.textContent = formatTime(audio.duration * 1000);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSubtitles();
+    });
+  </script>
+</body>
+</html>
